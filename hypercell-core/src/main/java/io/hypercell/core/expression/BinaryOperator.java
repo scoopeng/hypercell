@@ -36,8 +36,8 @@ public class BinaryOperator extends AbstractExpression
     @Override
     public io.hypercell.api.CellValue evaluate()
     {
-        MemCell leftmc = left.calculateCellValue();
-        MemCell rightmc = right.calculateCellValue();
+        MemCell leftmc = (MemCell) left.evaluate();
+        MemCell rightmc = (MemCell) right.evaluate();
         if (leftmc != null && leftmc.getErrorValue() != null)
         {
             return leftmc;
@@ -81,8 +81,8 @@ public class BinaryOperator extends AbstractExpression
             }
         } else if (op.equals("&"))
         {
-            String s1 = Function.getStringValue(leftmc, true);
-            String s2 = Function.getStringValue(rightmc, true);
+            String s1 = FunctionUtils.getStringValue(leftmc, true);
+            String s2 = FunctionUtils.getStringValue(rightmc, true);
             return new MemCell(s1 + s2);
         }
         if (leftmc == null)

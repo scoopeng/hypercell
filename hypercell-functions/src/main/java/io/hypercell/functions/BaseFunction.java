@@ -10,7 +10,7 @@ public abstract class BaseFunction implements Function {
 
     protected Double getNumericValue(CellValue cv) {
         if (cv == null) return null;
-        return cv.getNumberValue();
+        Number n = cv.getNumberValue(); return n == null ? null : n.doubleValue();
     }
 
     protected CellValue createNumber(double value) {

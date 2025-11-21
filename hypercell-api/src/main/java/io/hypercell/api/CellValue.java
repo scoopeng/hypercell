@@ -7,7 +7,7 @@ public interface CellValue {
     Object getValue();
     
     String getStringValue();
-    Double getNumberValue();
+    Number getNumberValue();
     Boolean getBooleanValue();
     CellValue[][] getArrayValue();
 }

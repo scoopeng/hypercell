@@ -31,9 +31,9 @@ public class Compile {
 
     public Compile(String formula, MemSheet sheet, FunctionRegistry registry) {
         CharStream input = CharStreams.fromString(formula);
-        HyperCellExpressionLexer lex = new HyperCellExpressionLexer(input);
+        io.hypercell.formula.HyperCellExpressionLexer lex = new HyperCellExpressionLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lex);
-        HyperCellExpressionParser parser = new HyperCellExpressionParser(tokens);
+        io.hypercell.formula.HyperCellExpressionParser parser = new HyperCellExpressionParser(tokens);
         
         this.tree = parser.start();
         this.cc = new CompileContext(sheet, registry);
@@ -56,51 +56,51 @@ public class Compile {
     }
 
     private void compile() {
-        if (tree instanceof StartContext) {
+        if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.StartContext) {
             Compile c = new Compile(tree.getChild(0), cc, registry);
             exp = c.getExpression();
-        } else if (tree instanceof PARENContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.PARENContext) {
             Compile c = new Compile(tree.getChild(1), cc, registry);
             exp = c.getExpression();
-        } else if (tree instanceof UMINUSContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.UMINUSContext) {
             exp = new UnaryOperator(tree.getChild(0), tree.getChild(1), cc);
-        } else if (tree instanceof ADDOPContext || tree instanceof MULOPContext || tree instanceof COMPOPPContext
-                || tree instanceof POWERContext || tree instanceof CONCATOPPContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.ADDOPContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.MULOPContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.COMPOPPContext
+                || tree instanceof io.hypercell.formula.HyperCellExpressionParser.POWERContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.CONCATOPPContext) {
             exp = new BinaryOperator(tree.getChild(0), tree.getChild(1), tree.getChild(2), cc);
-        } else if (tree instanceof NUMBERContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.NUMBERContext) {
             ParseTree child = tree.getChild(0);
-            if (child instanceof INTEGERVALContext || child instanceof DECIMALVALContext) {
+            if (child instanceof io.hypercell.formula.HyperCellExpressionParser.INTEGERVALContext || child instanceof io.hypercell.formula.HyperCellExpressionParser.DECIMALVALContext) {
                 try {
                     exp = new SheetNumber(tree.getChild(0));
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }
             }
-        } else if (tree instanceof STRINGContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.STRINGContext) {
             exp = new SheetString(tree.getChild(0));
-        } else if (tree instanceof CONSTANTContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.CONSTANTContext) {
             exp = new SheetConstant(tree);
-        } else if (tree instanceof REFContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.REFContext) {
             Compile c = new Compile(tree.getChild(0), cc, registry);
             exp = c.getExpression();
-        } else if (tree instanceof CELLContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.CELLContext) {
             Identifier id = new Identifier(tree.getChild(0), cc.getSheet());
             cc.addIdentifier(id);
             exp = id;
-        } else if (tree instanceof ItemContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.ItemContext) {
             Identifier id = new Identifier(tree, cc.getSheet());
             cc.addIdentifier(id);
             exp = id;
-        } else if (tree instanceof RangeContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.RangeContext) {
             exp = new Range(cc.getSheet(), tree);
             cc.addRange((Range) exp);
-        } else if (tree instanceof RangeorreferenceContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.RangeorreferenceContext) {
             Compile c = new Compile(tree.getChild(0), cc, registry);
             exp = c.getExpression();
-        } else if (tree instanceof MATHContext || tree instanceof LOGICALContext || tree instanceof STATISTICALContext || tree instanceof TEXTUALContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.MATHContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.LOGICALContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.STATISTICALContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.TEXTUALContext) {
             ParseTree child = tree.getChild(0);
             handleFunction(child);
-        } else if (tree instanceof GENERIC_FUNCTIONContext) {
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.GENERIC_FUNCTIONContext) {
             handleFunction(tree);
         }
     }
@@ -114,7 +114,7 @@ public class Compile {
                  // Clean up name if needed (remove parens if they are part of token?)
                  // Lexer defines SUMTOKEN as 'SUM'.
                  // Generic function: IDENTIFIER '(' ...
-                 if (funcTree instanceof GENERIC_FUNCTIONContext) {
+                 if (funcTree instanceof io.hypercell.formula.HyperCellExpressionParser.GENERIC_FUNCTIONContext) {
                      // funcName is IDENTIFIER
                  }
              }
@@ -132,7 +132,7 @@ public class Compile {
             }
         }
         
-        if (registry != null && registry.hasFunction(funcName)) {
+        if (registry != null && registry.getFunction(funcName) != null) {
             // We need Function interface to have execute
             // FunctionCallExpression takes Function, args, context
             // But FunctionRegistry.getFunction(name) returns Function.

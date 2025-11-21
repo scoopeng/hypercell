@@ -8,6 +8,7 @@ public abstract class AbstractExpression implements Expression {
     public abstract CellValue evaluate();
 
     public String getExcelFormula() {
-        return "";
+        return ""; }
+    public String getMetricFormula() { return ""; 
     }
 }

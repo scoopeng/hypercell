@@ -13,14 +13,14 @@ public class SumFunction extends BaseFunction {
             if (val == null) continue;
             
             if (val.getType() == CellValue.Type.NUMBER) {
-                sum += val.getNumberValue();
+                sum += val.getNumberValue().doubleValue();
             } else if (val.getType() == CellValue.Type.ARRAY) {
                  CellValue[][] array = val.getArrayValue();
                  if (array != null) {
                      for (CellValue[] row : array) {
                          for (CellValue cell : row) {
                              if (cell != null && cell.getType() == CellValue.Type.NUMBER) {
-                                 sum += cell.getNumberValue();
+                                 sum += cell.getNumberValue().doubleValue();
                              }
                          }
                      }

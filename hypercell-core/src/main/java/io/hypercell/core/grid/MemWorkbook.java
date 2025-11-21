@@ -252,7 +252,7 @@ public class MemWorkbook
             }
             for (MemSheet ms : sheets)
             {
-                ms.checkSpillAreas(sc);
+                ms.checkSpillAreas();
             }
             requiresCompilation = false;
             processScoopFormula();
@@ -332,15 +332,6 @@ public class MemWorkbook
         return sheets.get(index);
     }
 
-    public Workbook getWorkbook(Worksheet worksheet)
-    {
-        if (workbook == null)
-        {
-            // workbook = WorkbookManager.loadWorkbook(worksheet);
-        }
-        return workbook;
-    }
-
     public void compileFormulas()
     {
         if (!requiresCompilation)
@@ -348,11 +339,11 @@ public class MemWorkbook
         logger.info("Compiling formulas");
         for (MemSheet ms : sheets)
         {
-            ms.compileFormulas(sc);
+            ms.compileFormulas();
         }
         for (MemSheet ms : sheets)
         {
-            ms.checkSpillAreas(sc);
+            ms.checkSpillAreas();
         }
         processScoopFormula();
         requiresCompilation = false;
@@ -362,7 +353,7 @@ public class MemWorkbook
     {
         if (requiresCompilation)
         {
-            compileFormulas(sc);
+            compileFormulas();
             requiresCompilation = false;
         }
         for (MemSheet ms : sheets)
@@ -565,12 +556,7 @@ public class MemWorkbook
         }
     }
 
-    public Workbook getWorkbook()
-    {
-        return workbook;
-    }
-
-    public void setWorkbook(Workbook workbook)
+public void setWorkbook(Workbook workbook)
     {
         this.workbook = workbook;
     }
@@ -643,4 +629,5 @@ public class MemWorkbook
     {
         this.skipStyle = skipStyle;
     }
+
 }

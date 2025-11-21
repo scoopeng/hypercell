@@ -426,7 +426,7 @@ public class MemSheet implements io.hypercell.api.EvaluationContext
         {
             if (formula.equalsIgnoreCase("scooprefreshbutton()"))
             {
-                mc.getCellContext().setScoopSheetObject(new ScoopSheetObject("refreshInput"));
+                // mc.getCellContext().setScoopSheetObject(new ScoopSheetObject("refreshInput"));
                 mc.setStringValue("");
             }
         }
@@ -771,7 +771,7 @@ public class MemSheet implements io.hypercell.api.EvaluationContext
         return parseErrors;
     }
 
-    public Map<MemCell, SpillArea> getSpillAreaCache()
+    public Map<MemCell, io.hypercell.core.expression.SpillArea> getSpillAreaCache()
     {
         return spillAreaCache;
     }

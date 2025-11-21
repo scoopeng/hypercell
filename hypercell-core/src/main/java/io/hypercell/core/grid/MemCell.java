@@ -28,7 +28,7 @@ public class MemCell implements io.hypercell.api.CellValue {
         if (cellType == MemCellType.Number) return Type.NUMBER;
         return Type.EMPTY; // simplify
     }
-    @Override public CellValue[][] getArrayValue() { return null; } // simplify
+    @Override public io.hypercell.api.CellValue[][] getArrayValue() { return array; }
     @Override public Boolean getBooleanValue() { return numberValue != null && numberValue.doubleValue() != 0; }
 
     private static final Logger logger = LoggerFactory.getLogger(MemCell.class);
@@ -158,7 +158,7 @@ public class MemCell implements io.hypercell.api.CellValue {
                 MemCell value = null;
                 try
                 {
-                    value = compile.getExpression().calculateCellValue();
+                    value = (MemCell) compile.getExpression().evaluate();
                 } catch (Exception calcException)
                 {
                     logger.error("Error calculating MemCell with formula {}", formulaValue, calcException);
@@ -566,13 +566,13 @@ public class MemCell implements io.hypercell.api.CellValue {
             return;
         }
         CharStream input = CharStreams.fromString(formula);
-        ScoopExpressionLexer lex = new ScoopExpressionLexer(input);
+        io.hypercell.formula.HyperCellExpressionLexer lex = new io.hypercell.formula.HyperCellExpressionLexer(input);
         lex.removeErrorListeners();
-        lex.addErrorListener(ThrowingErrorListener.INSTANCE);
+        lex.addErrorListener(io.hypercell.core.expression.ThrowingErrorListener.INSTANCE);
         CommonTokenStream tokens = new CommonTokenStream(lex);
-        ScoopExpressionParser scoopparser = new ScoopExpressionParser(tokens);
+        io.hypercell.formula.HyperCellExpressionParser scoopparser = new io.hypercell.formula.HyperCellExpressionParser(tokens);
         scoopparser.removeErrorListeners();
-        scoopparser.addErrorListener(ThrowingErrorListener.INSTANCE);
+        scoopparser.addErrorListener(io.hypercell.core.expression.ThrowingErrorListener.INSTANCE);
         ExpressionContext expressionContext = null;
         try
         {
@@ -590,14 +590,14 @@ public class MemCell implements io.hypercell.api.CellValue {
             }
             return;
         }
-        compile = new Compile(sc, expressionContext, memSheet);
+        compile = new Compile(expressionContext, new io.hypercell.core.expression.CompileContext(memSheet, memSheet.getWorkbook().getRegistry()));
         if (!compile.isInformationalOnly())
         {
             for (Identifier id : compile.getIdentifiers())
             {
                 id.setSheet(memSheet);
             }
-            SpillArea spillArea = compile.getExpression().possibleSpillRange();
+            SpillArea spillArea = (SpillArea) compile.getExpression().possibleSpillRange();
             if (spillArea != null)
             {
                 memSheet.getSpillAreaCache().put(this, spillArea);

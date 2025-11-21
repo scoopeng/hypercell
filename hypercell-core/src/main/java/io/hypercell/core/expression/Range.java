@@ -236,7 +236,6 @@ public class Range extends AbstractExpression
         return new CellAddress(row + rp.startRow, col + rp.startCol);
     }
 
-    @Override
     public String getMetricFormula()
     {
         if (tableArray != null)
@@ -248,7 +247,6 @@ public class Range extends AbstractExpression
         return startAddress.getMetricFormula() + ":" + endAddress.getMetricFormula();
     }
 
-    @Override
     public String getExcelFormula()
     {
         if (tableArray != null)
@@ -260,11 +258,7 @@ public class Range extends AbstractExpression
         return startAddress.getExcelFormula() + ":" + endAddress.getExcelFormula();
     }
 
-    @Override
-    public MemCell calculateCellValue()
-    {
-        return null;
-    }
+
 
     public AbstractExpression getFilter()
     {
@@ -303,4 +297,10 @@ public class Range extends AbstractExpression
         }
         return "invalid range";
     }
+
+    @Override
+    public io.hypercell.api.CellValue evaluate() {
+        return null; // TODO: Return array of values or implement properly
+    }
+
 }

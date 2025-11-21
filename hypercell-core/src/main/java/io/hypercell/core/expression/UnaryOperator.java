@@ -29,7 +29,7 @@ public class UnaryOperator extends AbstractExpression
     @Override
     public io.hypercell.api.CellValue evaluate()
     {
-        MemCell result = exp.calculateCellValue();
+        MemCell result = (MemCell) exp.evaluate();
         if (isMinus)
         {
             if (result.getNumberValue() != null)
