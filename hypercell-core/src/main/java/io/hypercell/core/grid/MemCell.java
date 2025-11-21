@@ -9,9 +9,9 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import scoop.datagrid.ExcelDataGrid;
+
 import io.hypercell.core.expression.*;
-import scoop.expression.ScoopExpressionParser.ExpressionContext;
+import io.hypercell.formula.HyperCellExpressionParser.ExpressionContext;
 import io.hypercell.api.CellAddress;
 
 import java.text.NumberFormat;
@@ -30,8 +30,7 @@ public class MemCell implements io.hypercell.api.CellValue {
     }
     @Override public CellValue[][] getArrayValue() { return null; } // simplify
     @Override public Boolean getBooleanValue() { return numberValue != null && numberValue.doubleValue() != 0; }
- private class Dummy  implements io.hypercell.api.CellValue
-{
+
     private static final Logger logger = LoggerFactory.getLogger(MemCell.class);
     private static long count;
     private static final int MAX_RECURSION_DEPTH = 100;
@@ -687,7 +686,7 @@ public class MemCell implements io.hypercell.api.CellValue {
             var fmtString = style.getFormatString();
             if (fmtString != null)
             {
-                return ExcelDataGrid.isExcelDateFormat(fmtString);
+                return FormattingUtils.isExcelDateFormat(fmtString);
             }
         }
         return false;

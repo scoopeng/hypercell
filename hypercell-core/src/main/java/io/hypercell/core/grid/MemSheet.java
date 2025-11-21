@@ -11,9 +11,9 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.STCellType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import scoop.expression.Identifier;
-import scoop.expression.Range;
-import scoop.expression.SpillArea;
+import io.hypercell.core.expression.Identifier;
+import io.hypercell.core.expression.Range;
+import io.hypercell.core.expression.SpillArea;
 import io.hypercell.api.CellAddress;
 
 import java.util.*;
@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 /**
  * @author bradpeters
  */
-public class MemSheet
+public class MemSheet implements io.hypercell.api.EvaluationContext
 {
     private static final Logger logger = LoggerFactory.getLogger(MemSheet.class);
     private static final int MAX_LINES_PER_QUERY_SHEET = 10000;
@@ -775,4 +775,15 @@ public class MemSheet
     {
         return spillAreaCache;
     }
+
+    @Override
+    public io.hypercell.api.CellValue resolveReference(String sheet, int row, int col) {
+        return getCellAt(row, col); // Simplification: ignoring sheet arg for now if null
+    }
+
+    @Override
+    public io.hypercell.api.CellValue resolveIdentifier(String name) {
+        return null; // TODO: Named ranges
+    }
+
 }

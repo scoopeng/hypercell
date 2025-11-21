@@ -6,4 +6,5 @@ dependencies {
     implementation 'org.apache.poi:poi:5.2.3'
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
     implementation 'com.esotericsoftware:kryo:5.4.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 }

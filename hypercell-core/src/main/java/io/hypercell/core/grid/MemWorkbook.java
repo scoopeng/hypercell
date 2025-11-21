@@ -23,6 +23,7 @@ import io.hypercell.api.RangeAddress;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import io.hypercell.api.FunctionRegistry;
 import java.util.stream.IntStream;
 
 /**
@@ -30,6 +31,7 @@ import java.util.stream.IntStream;
  */
 public class MemWorkbook
 {
+    private transient FunctionRegistry registry;
     private static final Logger logger = LoggerFactory.getLogger(MemWorkbook.class);
     private String name;
     private List<MemSheet> sheets = new ArrayList<>();
@@ -49,6 +51,15 @@ public class MemWorkbook
     private transient boolean refreshQueryDataOnUse = false;
     private transient Map<String, Map<String, Object>> lookupMap;
     private transient boolean skipStyle;
+
+    
+    public FunctionRegistry getRegistry() {
+        return registry;
+    }
+
+    public void setRegistry(FunctionRegistry registry) {
+        this.registry = registry;
+    }
 
     public MemWorkbook()
     {
@@ -325,7 +336,7 @@ public class MemWorkbook
     {
         if (workbook == null)
         {
-            workbook = WorkbookManager.loadWorkbook(worksheet);
+            // workbook = WorkbookManager.loadWorkbook(worksheet);
         }
         return workbook;
     }
@@ -507,20 +518,20 @@ public class MemWorkbook
         kryo.register(java.util.HashMap.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.util.ArrayList.class);
-        kryo.register(MemWorkbook.class, new MemWorkbookSerializer());
+        kryo.register(MemWorkbook.class);
         kryo.register(MemSheet.class);
         kryo.register(MemCell.class);
         kryo.register(MemCellType.class);
         kryo.register(MemCell[].class);
         kryo.register(MemCell[][].class);
         kryo.register(int[].class);
-        kryo.register(MemCellContext.class, new MemCellContextSerializer(null));
+        kryo.register(MemCellContext.class);
         kryo.register(MemCellStyle.class);
         kryo.register(MemCellFont.class);
         kryo.register(FormulaError.class);
-        kryo.register(scoop.worksheet.CellAddress.class);
-        kryo.register(scoop.worksheet.RangeAddress.class);
-        kryo.register(scoop.worksheet.memsheet.ScoopSheetObject.class);
+        kryo.register(io.hypercell.api.CellAddress.class);
+        kryo.register(io.hypercell.api.RangeAddress.class);
+        // kryo.register(scoop.worksheet.memsheet.ScoopSheetObject.class);
         kryo.register(org.apache.poi.ss.usermodel.BorderStyle.class);
         kryo.register(org.apache.poi.ss.usermodel.HorizontalAlignment.class);
         kryo.register(org.apache.poi.ss.usermodel.VerticalAlignment.class);

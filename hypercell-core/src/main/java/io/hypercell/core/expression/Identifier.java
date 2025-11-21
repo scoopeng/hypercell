@@ -1,11 +1,10 @@
 package io.hypercell.core.expression;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-
 import io.hypercell.formula.HyperCellExpressionParser.ItemContext;
 import io.hypercell.formula.HyperCellExpressionParser.OffsetContext;
-
 import io.hypercell.api.CellAddress;
+import io.hypercell.api.CellValue;
 import io.hypercell.core.grid.FormulaError;
 import io.hypercell.core.grid.MemCell;
 import io.hypercell.core.grid.MemSheet;
@@ -16,11 +15,9 @@ public class Identifier extends AbstractExpression
     private String name;
     private CellAddress address;
     private int offset;
-    
     private MemSheet parentSheet;
     private Double nullValue;
     private boolean isTableCount;
-    
 
     public Identifier(String name)
     {
@@ -66,47 +63,28 @@ public class Identifier extends AbstractExpression
     }
 
     @Override
-    public MemCell calculateCellValue()
+    public CellValue evaluate()
     {
-        if (parentSheet != null) { MemCell mc = parentSheet.getCellAt(address); if (mc != null) { mc.calculate(); return mc; } return null; } else { return null; }
-                return new MemCell(FormulaError.NA);
-            }
-            if (offset != 0)
+        if (parentSheet != null)
+        {
+            if (address == null)
             {
-                if (dataSetValue.row - offset < 0)
-                {
-                    return new MemCell(0.0);
-                } else
-                {
-                    return new MemCell(
-                            dataSetValue.dataSet.getDoubleValue(dataSetValue.row - offset, dataSetValue.column));
-                }
-            } else
-            {
-                if (dataSetValue.dataSet == null)
-                {
-                    return new MemCell(dataSetValue.value);
-                }
-                Object value = dataSetValue.dataSet.getValue(dataSetValue.row, dataSetValue.column);
-                if (value instanceof String stringValue)
-                {
-                    return new MemCell(stringValue);
-                } else if (value instanceof Number numberValue)
-                {
-                    return new MemCell(numberValue);
-                } else if (value instanceof Boolean boolValue)
-                {
-                    return new MemCell(boolValue);
-                }
-                return new MemCell(FormulaError.NA);
+                return null;
             }
+            MemCell mc = parentSheet.getCellAt(address);
+            if (mc == null)
+            {
+                return null;
+            }
+            mc.calculate();
+            return mc;
         }
+        return null;
     }
 
     @Override
     public String getExcelFormula()
     {
-        char letterCol = 'A';
         if (address == null)
         {
             return "@NA";
@@ -116,27 +94,15 @@ public class Identifier extends AbstractExpression
 
     private String getSheetColumn(int colNumber)
     {
-        // Use the same correct algorithm as CellAddress.colCharacters()
-        // Excel columns are 1-based: A=0, B=1, ..., Z=25, AA=26, AB=27, etc.
         StringBuilder sb = new StringBuilder();
         int curValue = colNumber;
         do
         {
             int c = curValue % 26;
             sb.insert(0, (char) ((int) 'A' + c));
-            curValue = (curValue / 26) - 1;  // Subtract 1 to handle 1-based Excel columns
+            curValue = (curValue / 26) - 1;
         } while (curValue >= 0);
         return sb.toString();
-    }
-
-    @Override
-    public String getMetricFormula()
-    {
-        if (offset != 0)
-        {
-            return "OFFSET('" + name + "'," + offset + ")";
-        }
-        return "'" + name + "'";
     }
 
     public String getName()
@@ -148,10 +114,6 @@ public class Identifier extends AbstractExpression
     {
         this.name = name;
     }
-
-    
-
-    
 
     @Override
     public String toString()
@@ -222,36 +184,6 @@ public class Identifier extends AbstractExpression
         this.parentSheet = sheet;
     }
 
-    public MemCell calculateCellValue(int rowOffset, int columnOffset)
-    {
-        if (parentSheet == null)
-        {
-            return null;
-        }
-        if (address.sheetName != null && !parentSheet.getName().equals(address.sheetName))
-        {
-            return parentSheet.getCellAt(address.sheetName, address.row + rowOffset, address.column + columnOffset);
-        } else
-        {
-            return parentSheet.getCellAt(address.row + rowOffset, address.column + columnOffset);
-        }
-    }
-
-    public MemCell calculateCellValue(MemSheet memSheet, int rowOffset, int columnOffset)
-    {
-        if (memSheet == null)
-        {
-            return null;
-        }
-        if (address.sheetName != null && !memSheet.getName().equals(address.sheetName))
-        {
-            return memSheet.getCellAt(address.sheetName, address.row + rowOffset, address.column + columnOffset);
-        } else
-        {
-            return memSheet.getCellAt(address.row + rowOffset, address.column + columnOffset);
-        }
-    }
-
     public String getSheetName()
     {
         return address.sheetName;
@@ -271,8 +203,4 @@ public class Identifier extends AbstractExpression
     {
         return isTableCount;
     }
-
-    
-
-    
 }
