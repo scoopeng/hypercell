@@ -43,3 +43,5 @@ implementation 'io.hypercell:hypercell-core:0.1.0'
 ## 🤝 Relationship with Scoop
 
 HyperCell is the open-source calculation kernel extracted from [Scoop Analytics](https://scoopanalytics.com). It powers the "Digital Data Analyst" platform, handling millions of formula evaluations for autonomous data investigation.
+
+For details on the extraction process and verification, see [**Migration Success Report**](MIGRATION_SUCCESS.md).

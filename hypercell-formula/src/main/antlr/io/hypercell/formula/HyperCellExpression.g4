@@ -3,7 +3,9 @@
  */
  grammar HyperCellExpression;
 
- 
+@header {
+    package io.hypercell.formula;
+}
 
  start
  :
@@ -33,6 +35,7 @@
  	string # STRING | 
  	boolexp # BOOLEAN |
  	constexp # CONSTANT |
+ 	scoop # SCOOP |
  	sheetsexport # SHEETS |
  	genericFunction # GENERIC_FUNCTION
  ;

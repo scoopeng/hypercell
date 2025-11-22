@@ -1,0 +1,6 @@
+package scoop.user;
+
+public class User {
+    public String userID;
+    public String accountID;
+}

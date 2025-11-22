@@ -37,6 +37,21 @@ public class RangeAddress
 
      */
 
+    public int getFirstRowNumber(WorkbookDimensions wb) {
+        return start != null ? start.row : 0;
+    }
+    public int getLastRowNumber(WorkbookDimensions wb) {
+        if (end != null && end.row >= 0) return end.row;
+        return wb.getNumRows() - 1;
+    }
+    public int getFirstColumnNumber(WorkbookDimensions wb) {
+        return start != null ? start.column : 0;
+    }
+    public int getLastColumnNumber(WorkbookDimensions wb) {
+        if (end != null && end.column >= 0) return end.column;
+        return wb.getNumColumns() - 1;
+    }
+
     @Override
     public String toString()
     {

@@ -29,7 +29,7 @@ import java.util.stream.IntStream;
 /**
  * @author bradpeters
  */
-public class MemWorkbook
+public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
 {
     private transient FunctionRegistry registry;
     private static final Logger logger = LoggerFactory.getLogger(MemWorkbook.class);
@@ -61,10 +61,41 @@ public class MemWorkbook
         this.registry = registry;
     }
 
-    public MemWorkbook()
-    {
-
+    public MemWorkbook(scoop.ScoopContext sc, String name, org.apache.poi.ss.usermodel.Workbook wb, boolean b) {
+        this.name = name;
+        this.registry = new io.hypercell.api.FunctionRegistry() {
+            public void register(String name, io.hypercell.api.Function function) {}
+            public io.hypercell.api.Function getFunction(String name) { return null; }
+        };
     }
+
+    @Override
+    public int getNumRows() { return 1048576; }
+    @Override
+    public int getNumColumns() { return 16384; }
+
+    public MemCell getCellAt(int row, int col) {
+        if (sheets.isEmpty()) return null;
+        return sheets.get(0).getCellAt(row, col);
+    }
+
+    public Double getDoubleValue(int row, int col) {
+        MemCell cell = getCellAt(row, col);
+        return cell != null ? cell.getDoubleValue() : null;
+    }
+
+    public Object getValue(int row, int col) {
+        MemCell cell = getCellAt(row, col);
+        return cell != null ? cell.getValue() : null;
+    }
+
+    public void calculate(scoop.ScoopContext sc) {
+        calculate();
+    }
+
+    public scoop.datatable.ColumnMetadata[] getColumnMetadata() { return null; }
+
+    public MemWorkbook() {}
 
     public MemWorkbook(MemWorkbook mw)
     {

@@ -21,6 +21,17 @@ import io.hypercell.api.Function;
 import io.hypercell.api.Expression;
 
 import io.hypercell.formula.HyperCellExpressionParser.*;
+import scoop.expression.MathFunction;
+import scoop.expression.LogicalFunction;
+import scoop.expression.TextualFunction;
+import scoop.expression.StatisticalFunction;
+import scoop.expression.FinancialFunction;
+import scoop.expression.LookupFunction;
+import scoop.expression.DateTimeFunction;
+import scoop.expression.FilterFunction;
+import scoop.expression.InformationFunction;
+import scoop.expression.ScoopFunction;
+import scoop.expression.ScoopExpressionWrapper;
 
 public class Compile {
     private static final Logger logger = LoggerFactory.getLogger(Compile.class);
@@ -97,9 +108,39 @@ public class Compile {
         } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.RangeorreferenceContext) {
             Compile c = new Compile(tree.getChild(0), cc, registry);
             exp = c.getExpression();
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.MATHContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.LOGICALContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.STATISTICALContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.TEXTUALContext) {
-            ParseTree child = tree.getChild(0);
-            handleFunction(child);
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.MATHContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new MathFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.LOGICALContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new LogicalFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.STATISTICALContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new StatisticalFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.TEXTUALContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new TextualFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.FINANCIALContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new FinancialFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.LOOKUPContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new LookupFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.DATETIMEContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new DateTimeFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.FILTERContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new FilterFunction(tree.getChild(0), scc));
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.INFORMATIONALContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new InformationFunction(tree.getChild(0), scc));
+            if (scc.isInformationalOnly()) {
+                cc.setInformationalOnly(true);
+            }
+        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.SCOOPContext) {
+            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
+            exp = new ScoopExpressionWrapper(new ScoopFunction(tree.getChild(0), scc));
         } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.GENERIC_FUNCTIONContext) {
             handleFunction(tree);
         }

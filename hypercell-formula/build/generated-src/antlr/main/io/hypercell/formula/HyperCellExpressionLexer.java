@@ -1,5 +1,7 @@
 // Generated from io/hypercell/formula/HyperCellExpression.g4 by ANTLR 4.10.1
-package io.hypercell.formula;
+
+    package io.hypercell.formula;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

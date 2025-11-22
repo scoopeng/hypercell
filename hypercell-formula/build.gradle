@@ -9,5 +9,5 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "64m"
-    arguments += ["-no-listener", "-no-visitor", "-package", "io.hypercell.formula"]
+    arguments += ["-no-listener", "-no-visitor"]
 }

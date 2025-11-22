@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.hypercell.core.CrossValidationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-11-22T22:52:21" hostname="brad-EVO-X2" time="34.478">
+  <properties/>
+  <testcase name="testHyperCellMatchesScoopCalculations()" classname="io.hypercell.core.CrossValidationTest" time="34.478">
+    <failure message="org.opentest4j.AssertionFailedError: Cross-validation failed: 1 formula mismatches detected" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: Cross-validation failed: 1 formula mismatches detected
+	at app//org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at app//org.junit.jupiter.api.Assertions.fail(Assertions.java:134)
+	at app//io.hypercell.core.CrossValidationTest.testHyperCellMatchesScoopCalculations(CrossValidationTest.java:98)
+	at java.base@21.0.9-ea/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base@21.0.9-ea/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base@21.0.9-ea/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <system-out><![CDATA[
+=== Testing: lboval.xlsx ===
+  ✅ Sheets: 1
+  ✅ Formulas validated: 535
+  ⚠️  Formulas skipped: 0
+  ❌ Mismatches: 0
+
+=== Testing: desjardan.xlsx ===
+  ✅ Sheets: 1
+  ✅ Formulas validated: 7
+  ⚠️  Formulas skipped: 0
+  ❌ Mismatches: 0
+
+=== Testing: Box IPO Financial Model.xlsx ===
+  ✅ Sheets: 15
+  ✅ Formulas validated: 1818
+  ⚠️  Formulas skipped: 4
+  ❌ Mismatches: 0
+
+=== Testing: TestSheet.xlsx ===
+  ✅ Sheets: 11
+  ✅ Formulas validated: 295
+  ⚠️  Formulas skipped: 0
+  ❌ Mismatches: 1
+  MISMATCHES DETECTED:
+    A2 [_xlfn._xlws.FILTER(P:Q,(K:K=C2)*(P:P="completeAPI"))]: String mismatch - HyperCell='' Excel='completeAPI'
+
+=== Testing: Position2 - EMP Sept.xlsx ===
+  ✅ Sheets: 8
+  ✅ Formulas validated: 79342
+  ⚠️  Formulas skipped: 8
+  ❌ Mismatches: 0
+
+=== Testing: Dashboard Report April 2011-Bob Lopez.xlsx ===
+  ✅ Sheets: 5
+  ✅ Formulas validated: 421
+  ⚠️  Formulas skipped: 0
+  ❌ Mismatches: 0
+
+=== Testing: ratings.xlsx ===
+  ✅ Sheets: 16
+  ✅ Formulas validated: 4
+  ⚠️  Formulas skipped: 0
+  ❌ Mismatches: 0
+
+=== Testing: capbudg.xlsx ===
+  ✅ Sheets: 1
+  ✅ Formulas validated: 214
+  ⚠️  Formulas skipped: 0
+  ❌ Mismatches: 0
+
+=== Testing: statmnts.xlsx ===
+  ✅ Sheets: 6
+  ✅ Formulas validated: 207
+  ⚠️  Formulas skipped: 0
+  ❌ Mismatches: 0
+
+
+═══════════════════════════════════════════════════════════
+         HYPERCELL CROSS-VALIDATION SUMMARY
+═══════════════════════════════════════════════════════════
+Workbooks tested:     9
+Total sheets:         64
+Formulas validated:   82843
+Formulas skipped:     12
+Mismatches found:     1
+
+❌ FAILURE: 1 mismatches detected
+
+Detailed mismatches:
+
+TestSheet.xlsx:
+  A2 [_xlfn._xlws.FILTER(P:Q,(K:K=C2)*(P:P="completeAPI"))]: String mismatch - HyperCell='' Excel='completeAPI'
+═══════════════════════════════════════════════════════════
+]]></system-out>
+  <system-err><![CDATA[ERROR StatusLogger Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/lboval.xlsx
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/desjardan.xlsx
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Box IPO Financial Model.xlsx
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/TestSheet.xlsx
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Position2 - EMP Sept.xlsx
+]]></system-err>
+</testsuite>

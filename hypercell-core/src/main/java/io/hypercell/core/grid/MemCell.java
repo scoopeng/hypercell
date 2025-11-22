@@ -9,8 +9,10 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import io.hypercell.core.expression.*;
+import io.hypercell.core.expression.Compile;
+import io.hypercell.core.expression.Identifier;
+import io.hypercell.core.expression.Range;
+import io.hypercell.core.expression.SpillArea;
 import io.hypercell.formula.HyperCellExpressionParser.ExpressionContext;
 import io.hypercell.api.CellAddress;
 
@@ -53,6 +55,21 @@ public class MemCell implements io.hypercell.api.CellValue {
     public MemCell()
     {
 
+    }
+
+    public MemCell(Object value)
+    {
+        if (value instanceof String) {
+            this.cellType = MemCellType.String;
+            this.stringValue = (String) value;
+        } else if (value instanceof Number) {
+            this.cellType = MemCellType.Number;
+            this.numberValue = (Number) value;
+        } else if (value instanceof Boolean) {
+            this.cellType = MemCellType.Number;
+            this.booleanColumn = true;
+            this.numberValue = ((Boolean) value) ? 1 : 0;
+        }
     }
 
     public MemCell(String value)
@@ -547,6 +564,10 @@ public class MemCell implements io.hypercell.api.CellValue {
                 result.add(idAddress);
         }
         return result;
+    }
+
+    public void compileFormula(scoop.ScoopContext sc, MemSheet memSheet) {
+        compileFormula(memSheet);
     }
 
     public void compileFormula(MemSheet memSheet)
