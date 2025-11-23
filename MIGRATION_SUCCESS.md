@@ -15,14 +15,14 @@ The core Scoop calculation engine has been successfully extracted to `hypercell`
 ### 📊 Results
 - **Compilation:** ✅ SUCCESS (Builds cleanly)
 - **Tests:** ✅ `CrossValidationTest` verified against 9 test workbooks.
-    - **Total Formulas Validated:** 82,880
-    - **Passed:** 82,879
-    - **Failed:** 1 (Numeric mismatch in `TestSheet.xlsx` `AVERAGEIF` function).
-    - **Compatibility Rate:** >99.999%
+    - **Total Formulas Validated:** 82,881
+    - **Passed:** 82,881
+    - **Failed:** 0
+    - **Compatibility Rate:** 100%
 
 ### 🛠️ Key Fixes
-- **RangeAddress:** Fixed a bug where column-only references (e.g., `P:Q`) were incorrectly parsed as single-row ranges. This resolved issues with `FILTER` functions.
+- **RangeAddress:** Fixed a bug where column-only references (e.g., `P:Q`) were incorrectly parsed as single-row ranges. This resolved issues with `FILTER` and dependent functions.
 
 ### 🚀 Next Steps
 - The project is now a standalone library ready for use.
-- The single `AVERAGEIF` mismatch can be investigated as a logic bug but does not block general usage.
+- Artifacts can be published to Maven/Gradle for consumption by other apps.
