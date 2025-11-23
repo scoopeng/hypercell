@@ -10,3 +10,11 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
 }
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+}

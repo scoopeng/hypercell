@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.hypercell.core.CrossValidationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-11-23T00:54:21" hostname="brad-EVO-X2" time="30.462">
+<testsuite name="io.hypercell.core.CrossValidationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-23T01:58:07" hostname="brad-EVO-X2" time="33.414">
   <properties/>
-  <testcase name="testHyperCellMatchesScoopCalculations()" classname="io.hypercell.core.CrossValidationTest" time="30.462">
-    <failure message="org.opentest4j.AssertionFailedError: Cross-validation failed: 1 formula mismatches detected" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: Cross-validation failed: 1 formula mismatches detected
-	at app//org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
-	at app//org.junit.jupiter.api.Assertions.fail(Assertions.java:134)
-	at app//io.hypercell.core.CrossValidationTest.testHyperCellMatchesScoopCalculations(CrossValidationTest.java:98)
-	at java.base@21.0.9-ea/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base@21.0.9-ea/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base@21.0.9-ea/java.util.ArrayList.forEach(ArrayList.java:1596)
-</failure>
-  </testcase>
+  <testcase name="testHyperCellMatchesScoopCalculations()" classname="io.hypercell.core.CrossValidationTest" time="33.414"/>
   <system-out><![CDATA[
 === Testing: lboval.xlsx ===
   ✅ Sheets: 1
@@ -32,11 +23,9 @@
 
 === Testing: TestSheet.xlsx ===
   ✅ Sheets: 11
-  ✅ Formulas validated: 332
+  ✅ Formulas validated: 333
   ⚠️  Formulas skipped: 0
-  ❌ Mismatches: 1
-  MISMATCHES DETECTED:
-    F55 [AVERAGEIF($B$52:$B$60,E55,$C$52:$C$60)]: Numeric mismatch - HyperCell=45.3333333333 Excel=59.6666666667 (diff=1.43e+01)
+  ❌ Mismatches: 0
 
 === Testing: Position2 - EMP Sept.xlsx ===
   ✅ Sheets: 8
@@ -74,24 +63,20 @@
 ═══════════════════════════════════════════════════════════
 Workbooks tested:     9
 Total sheets:         64
-Formulas validated:   82880
+Formulas validated:   82881
 Formulas skipped:     12
-Mismatches found:     1
+Mismatches found:     0
 
-❌ FAILURE: 1 mismatches detected
-
-Detailed mismatches:
-
-TestSheet.xlsx:
-  F55 [AVERAGEIF($B$52:$B$60,E55,$C$52:$C$60)]: Numeric mismatch - HyperCell=45.3333333333 Excel=59.6666666667 (diff=1.43e+01)
+✅ SUCCESS: All calculations match!
+   HyperCell produces identical results to Scoop.
 ═══════════════════════════════════════════════════════════
 ]]></system-out>
   <system-err><![CDATA[ERROR StatusLogger Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...
 SLF4J: No SLF4J providers were found.
 SLF4J: Defaulting to no-operation (NOP) logger implementation
 SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
-Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/lboval.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/desjardan.xlsx
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/lboval.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Box IPO Financial Model.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/TestSheet.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Position2 - EMP Sept.xlsx
