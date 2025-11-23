@@ -53,6 +53,16 @@ public class MemWorkbook implements io.hypercell.api.WorkbookDimensions
     private transient boolean skipStyle;
 
     
+    private transient io.hypercell.core.expression.CompilerDelegate compilerDelegate;
+
+    public io.hypercell.core.expression.CompilerDelegate getCompilerDelegate() {
+        return compilerDelegate;
+    }
+
+    public void setCompilerDelegate(io.hypercell.core.expression.CompilerDelegate compilerDelegate) {
+        this.compilerDelegate = compilerDelegate;
+    }
+
     public FunctionRegistry getRegistry() {
         return registry;
     }

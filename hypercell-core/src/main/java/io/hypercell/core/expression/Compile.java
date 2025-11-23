@@ -3,35 +3,17 @@ package io.hypercell.core.expression;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.hypercell.formula.HyperCellExpressionLexer;
 import io.hypercell.formula.HyperCellExpressionParser;
 import io.hypercell.core.grid.MemSheet;
-import io.hypercell.api.EvaluationContext;
 import io.hypercell.api.FunctionRegistry;
-import io.hypercell.api.Function;
 import io.hypercell.api.Expression;
 
-import io.hypercell.formula.HyperCellExpressionParser.*;
-import scoop.expression.MathFunction;
-import scoop.expression.LogicalFunction;
-import scoop.expression.TextualFunction;
-import scoop.expression.StatisticalFunction;
-import scoop.expression.FinancialFunction;
-import scoop.expression.LookupFunction;
-import scoop.expression.DateTimeFunction;
-import scoop.expression.FilterFunction;
-import scoop.expression.InformationFunction;
-import scoop.expression.ScoopFunction;
-import scoop.expression.ScoopExpressionWrapper;
+import java.util.List;
 
 public class Compile {
     private static final Logger logger = LoggerFactory.getLogger(Compile.class);
@@ -66,128 +48,23 @@ public class Compile {
         compile();
     }
 
-    private void compile() {
-        if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.StartContext) {
-            Compile c = new Compile(tree.getChild(0), cc, registry);
-            exp = c.getExpression();
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.PARENContext) {
-            Compile c = new Compile(tree.getChild(1), cc, registry);
-            exp = c.getExpression();
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.UMINUSContext) {
-            exp = new UnaryOperator(tree.getChild(0), tree.getChild(1), cc);
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.ADDOPContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.MULOPContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.COMPOPPContext
-                || tree instanceof io.hypercell.formula.HyperCellExpressionParser.POWERContext || tree instanceof io.hypercell.formula.HyperCellExpressionParser.CONCATOPPContext) {
-            exp = new BinaryOperator(tree.getChild(0), tree.getChild(1), tree.getChild(2), cc);
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.NUMBERContext) {
-            ParseTree child = tree.getChild(0);
-            if (child instanceof io.hypercell.formula.HyperCellExpressionParser.INTEGERVALContext || child instanceof io.hypercell.formula.HyperCellExpressionParser.DECIMALVALContext) {
-                try {
-                    exp = new SheetNumber(tree.getChild(0));
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
-                }
-            }
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.STRINGContext) {
-            exp = new SheetString(tree.getChild(0));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.CONSTANTContext) {
-            exp = new SheetConstant(tree);
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.REFContext) {
-            Compile c = new Compile(tree.getChild(0), cc, registry);
-            exp = c.getExpression();
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.CELLContext) {
-            Identifier id = new Identifier(tree.getChild(0), cc.getSheet());
-            cc.addIdentifier(id);
-            exp = id;
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.ItemContext) {
-            Identifier id = new Identifier(tree, cc.getSheet());
-            cc.addIdentifier(id);
-            exp = id;
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.RangeContext) {
-            exp = new Range(cc.getSheet(), tree);
-            cc.addRange((Range) exp);
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.RangeorreferenceContext) {
-            Compile c = new Compile(tree.getChild(0), cc, registry);
-            exp = c.getExpression();
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.MATHContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new MathFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.LOGICALContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new LogicalFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.STATISTICALContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new StatisticalFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.TEXTUALContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new TextualFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.FINANCIALContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new FinancialFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.LOOKUPContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new LookupFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.DATETIMEContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new DateTimeFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.FILTERContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new FilterFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.INFORMATIONALContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new InformationFunction(tree.getChild(0), scc));
-            if (scc.isInformationalOnly()) {
-                cc.setInformationalOnly(true);
-            }
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.SCOOPContext) {
-            scoop.expression.CompileContext scc = new scoop.expression.CompileContext(null, cc.getSheet());
-            exp = new ScoopExpressionWrapper(new ScoopFunction(tree.getChild(0), scc));
-        } else if (tree instanceof io.hypercell.formula.HyperCellExpressionParser.GENERIC_FUNCTIONContext) {
-            handleFunction(tree);
-        }
+    public Compile(String formula, CompileContext cc) {
+        CharStream input = CharStreams.fromString(formula);
+        io.hypercell.formula.HyperCellExpressionLexer lex = new HyperCellExpressionLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+        io.hypercell.formula.HyperCellExpressionParser parser = new HyperCellExpressionParser(tokens);
+        this.tree = parser.start();
+        this.cc = cc;
+        this.registry = cc.getRegistry();
+        compile();
     }
-    
-    private void handleFunction(ParseTree funcTree) {
-        String funcName = "";
-        if (funcTree.getChildCount() > 0) {
-             ParseTree first = funcTree.getChild(0);
-             if (first instanceof TerminalNodeImpl) {
-                 funcName = first.getText().toUpperCase();
-                 // Clean up name if needed (remove parens if they are part of token?)
-                 // Lexer defines SUMTOKEN as 'SUM'.
-                 // Generic function: IDENTIFIER '(' ...
-                 if (funcTree instanceof io.hypercell.formula.HyperCellExpressionParser.GENERIC_FUNCTIONContext) {
-                     // funcName is IDENTIFIER
-                 }
-             }
+
+    private void compile() {
+        CompilerDelegate delegate = cc.getSheet().getWorkbook().getCompilerDelegate();
+        if (delegate == null) {
+            delegate = new StandardCompilerDelegate();
         }
-        
-        List<Expression> args = new ArrayList<>();
-        for (int i = 0; i < funcTree.getChildCount(); i++) {
-            ParseTree child = funcTree.getChild(i);
-            if (child instanceof TerminalNodeImpl) continue; // Skip tokens
-            // Skip if child is not an expression type we know?
-            // We can recursively compile it.
-            Compile c = new Compile(child, cc, registry);
-            if (c.getExpression() != null) {
-                args.add(c.getExpression());
-            }
-        }
-        
-        if (registry != null && registry.getFunction(funcName) != null) {
-            // We need Function interface to have execute
-            // FunctionCallExpression takes Function, args, context
-            // But FunctionRegistry.getFunction(name) returns Function.
-            // Wait, my Registry interface had 'hasFunction' and 'execute'.
-            // It should have 'getFunction'.
-            // I defined FunctionRegistry earlier:
-            // interface FunctionRegistry { Function getFunction(String name); void register(...); }
-            // So I can use it.
-            Function func = registry.getFunction(funcName);
-            exp = new FunctionCallExpression(func, args, cc.getSheet()); // MemSheet implements EvaluationContext (need to ensure)
-        } else {
-            // Unknown function
-            // Create Error expression?
-        }
+        exp = delegate.compile(tree, cc);
     }
 
     public Expression getExpression() {

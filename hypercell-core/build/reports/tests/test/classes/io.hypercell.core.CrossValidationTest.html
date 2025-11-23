@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">0</div>
+<div class="counter">1</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">33.414s</div>
+<div class="counter">27.568s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox success" id="successRate">
-<div class="percent">100%</div>
+<div class="infoBox failures" id="successRate">
+<div class="percent">0%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,16 +61,36 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Tests</a>
+<a href="#tab0">Failed tests</a>
 </li>
 <li>
-<a href="#tab1">Standard output</a>
+<a href="#tab1">Tests</a>
 </li>
 <li>
-<a href="#tab2">Standard error</a>
+<a href="#tab2">Standard output</a>
+</li>
+<li>
+<a href="#tab3">Standard error</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<div class="test">
+<a name="testHyperCellMatchesScoopCalculations()"></a>
+<h3 class="failures">testHyperCellMatchesScoopCalculations()</h3>
+<span class="code">
+<pre>org.opentest4j.AssertionFailedError: Cross-validation failed: 2 formula mismatches detected
+	at app//org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at app//org.junit.jupiter.api.Assertions.fail(Assertions.java:134)
+	at app//io.hypercell.core.CrossValidationTest.testHyperCellMatchesScoopCalculations(CrossValidationTest.java:98)
+	at java.base@21.0.9-ea/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base@21.0.9-ea/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base@21.0.9-ea/java.util.ArrayList.forEach(ArrayList.java:1596)
+</pre>
+</span>
+</div>
+</div>
+<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -81,13 +101,13 @@
 </tr>
 </thead>
 <tr>
-<td class="success">testHyperCellMatchesScoopCalculations()</td>
-<td class="success">33.414s</td>
-<td class="success">passed</td>
+<td class="failures">testHyperCellMatchesScoopCalculations()</td>
+<td class="failures">27.568s</td>
+<td class="failures">failed</td>
 </tr>
 </table>
 </div>
-<div id="tab1" class="tab">
+<div id="tab2" class="tab">
 <h2>Standard output</h2>
 <span class="code">
 <pre>
@@ -117,9 +137,12 @@
 
 === Testing: Position2 - EMP Sept.xlsx ===
   ✅ Sheets: 8
-  ✅ Formulas validated: 79342
+  ✅ Formulas validated: 79340
   ⚠️  Formulas skipped: 8
-  ❌ Mismatches: 0
+  ❌ Mismatches: 2
+  MISMATCHES DETECTED:
+    H247 [SUMIFS('PE-RAW'!$I:$I,'PE-RAW'!$C:$C,$D247,'PE-RAW'!$B:$B,&quot;&gt;=&quot;&amp;$G$2,'PE-RAW'!$B:$B,&quot;&lt;=&quot;&amp;$H$2)]: Numeric mismatch - HyperCell=56.0000000000 Excel=68.0000000000 (diff=1.20e+01)
+    K247 [IFERROR(H247/($AI$163*1),0)]: Numeric mismatch - HyperCell=0.4117647059 Excel=0.5000000000 (diff=8.82e-02)
 
 === Testing: Dashboard Report April 2011-Bob Lopez.xlsx ===
   ✅ Sheets: 5
@@ -151,25 +174,30 @@
 ═══════════════════════════════════════════════════════════
 Workbooks tested:     9
 Total sheets:         64
-Formulas validated:   82881
+Formulas validated:   82879
 Formulas skipped:     12
-Mismatches found:     0
+Mismatches found:     2
 
-✅ SUCCESS: All calculations match!
-   HyperCell produces identical results to Scoop.
+❌ FAILURE: 2 mismatches detected
+
+Detailed mismatches:
+
+Position2 - EMP Sept.xlsx:
+  H247 [SUMIFS('PE-RAW'!$I:$I,'PE-RAW'!$C:$C,$D247,'PE-RAW'!$B:$B,&quot;&gt;=&quot;&amp;$G$2,'PE-RAW'!$B:$B,&quot;&lt;=&quot;&amp;$H$2)]: Numeric mismatch - HyperCell=56.0000000000 Excel=68.0000000000 (diff=1.20e+01)
+  K247 [IFERROR(H247/($AI$163*1),0)]: Numeric mismatch - HyperCell=0.4117647059 Excel=0.5000000000 (diff=8.82e-02)
 ═══════════════════════════════════════════════════════════
 </pre>
 </span>
 </div>
-<div id="tab2" class="tab">
+<div id="tab3" class="tab">
 <h2>Standard error</h2>
 <span class="code">
 <pre>ERROR StatusLogger Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...
 SLF4J: No SLF4J providers were found.
 SLF4J: Defaulting to no-operation (NOP) logger implementation
 SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
-Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/desjardan.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/lboval.xlsx
+Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/desjardan.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Box IPO Financial Model.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/TestSheet.xlsx
 Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test/resources/testsheets/Position2 - EMP Sept.xlsx
@@ -184,7 +212,7 @@ Cleaning up unclosed ZipFile for archive /home/bradpeters/dev/scoop/app/src/test
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.5</a> at Nov 22, 2025, 5:58:41 PM</p>
+<a href="http://www.gradle.org">Gradle 8.5</a> at Nov 22, 2025, 8:00:16 PM</p>
 </div>
 </div>
 </body>

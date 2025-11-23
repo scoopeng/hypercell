@@ -29,7 +29,7 @@ public class Range extends AbstractExpression
     private Identifier endAddress;
     private RangeAddress tableArray;
     private boolean isOffset = false;
-    private AbstractExpression filter;
+    private io.hypercell.api.Expression filter;
 
     public Range(Identifier startAddress, Identifier endAddress)
     {
@@ -260,12 +260,12 @@ public class Range extends AbstractExpression
 
 
 
-    public AbstractExpression getFilter()
+    public io.hypercell.api.Expression getFilter()
     {
         return filter;
     }
 
-    public void setFilter(AbstractExpression filter)
+    public void setFilter(io.hypercell.api.Expression filter)
     {
         this.filter = filter;
     }
